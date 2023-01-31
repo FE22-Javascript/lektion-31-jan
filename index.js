@@ -6,8 +6,7 @@ const searchButton = document.querySelector('#search-button');
 const searchInput = document.querySelector('#search-input');
 
 // eventlyssnare på vår sökknapp
-searchButton.addEventListener('click', (event) => {
-    event.preventDefault();
+searchButton.addEventListener('click', () => {
     console.log(searchInput.value);
     //getImages();
 });
