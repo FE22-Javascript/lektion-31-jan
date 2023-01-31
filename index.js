@@ -1,6 +1,4 @@
-const ACCESS_KEY = '';
-const ACCESS_KEY2 = '';
-const ACCESS_KEY3 = '';
+
 const start_URL = 'https://api.unsplash.com';
 const searchButton = document.querySelector('#search-button');
 const searchInput = document.querySelector('#search-input');
@@ -12,35 +10,36 @@ searchButton.addEventListener('click', (event) => {
     getImages(searchInput.value);
 });
 
-function getImages(searchTerm) {
+async function getImages(searchTerm) {
     // vår fetch mot API'et
     // fetch är async
     // '/photos/random' är vår endpoint
     // för att gå mot search-endpointen som api'et har; '/search/photos/'
     // '&count=10' betyder att vi skickar in en parameter där vi vill ha 10 st bilder
-    fetch(start_URL
+    let data = await fetch(start_URL
         + '/search/photos/?client_id=' + ACCESS_KEY2
-        + '&per_page=3&query=' + searchTerm).then(data => data.json()).then((data) => {
-            // url: https://api.unsplash.com/search/photos/?client_id=<ACCESS_KEY>&count=10&query=cats
+        + '&per_page=3&query=' + searchTerm);
+    data = await data.json();
+    // url: https://api.unsplash.com/search/photos/?client_id=<ACCESS_KEY>&count=10&query=cats
 
-            // töm elementet som innehåller bilder, ifall det finns tidigare värden och man söker igen
-            document.querySelector('.images-container').innerHTML = "";
+    // töm elementet som innehåller bilder, ifall det finns tidigare värden och man söker igen
+    document.querySelector('.images-container').innerHTML = "";
 
-            // fetchen returnerar en lista med objekt där vi har information som vi vill ha
-            data.results.forEach(function (image) {
-                // för varje element i listan vill vi trycka ut den i vårt UI
-                // måste skapa vårt nya element i js först
-                let img = document.createElement('img');
-                img.setAttribute('src', image.urls.small);
-                img.setAttribute('alt', image.alt_description);
-                // för att den skall synas i ui behöver vi appenda det till ett redan existerande element där
-                document.querySelector('.images-container').appendChild(img);
-            });
-        })
+    // fetchen returnerar en lista med objekt där vi har information som vi vill ha
+    data.results.forEach(function (image) {
+        // för varje element i listan vill vi trycka ut den i vårt UI
+        // måste skapa vårt nya element i js först
+        let img = document.createElement('img');
+        img.setAttribute('src', image.urls.small);
+        img.setAttribute('alt', image.alt_description);
+        // för att den skall synas i ui behöver vi appenda det till ett redan existerande element där
+        document.querySelector('.images-container').appendChild(img);
+    });
+
 };
 
 // create promise
-let promise = new Promise(function(resolve, reject) {
+let promise = new Promise(function (resolve, reject) {
     resolve('done');
     reject(new Error('du suger')); // ignorerat
     setTimeout(() => resolve('OK'), 1000); // ignorerad
